@@ -20,45 +20,69 @@
             <div class="banner">
                <h1>Community</h1>
             </div>
-            <h2>2 Members</h2>
-            <h2>1 Online</h2>
-            <br>
             <?php
-               if(isset($_SESSION['username'])) {
-                  echo '<a href="profile.php" id="newpost">NEW POST</a>';
+               include 'includes/db_connection.php';
+
+               // Open the database connection
+               try{
+                  $pdo = openConnection();
+               } catch (PDOException $e){
+                  die($e->getMessage());
                }
-            ?>  
-         </article>
 
-         <article id="tags">
-            <div class="banner">
-               <h1>Tags</h1>
-            </div>
+               // Display the number of members and how many are online.
+               include 'sql/count_members.php';
+               echo "<h2>$members->members Members</h2>";
+               if(isset($_SESSION['username'])) {
+                  echo "<h2>1 Online</h2><br>";
+                  echo '<a href="profile.php" id="newpost">NEW POST</a>';
+               } else {
+                  echo "<h2>0 Online</h2><br>";
+                  echo '<a href="login.php" id="newpost">NEW POST</a>';
+               }
+               
+               // Display the total number of comments and scratches
+               echo "</article>";
+               echo "<article id='tags'>";
+                  echo "<div class='banner'>";
+                     echo "<h1>Global Counts</h1>";
+                  echo "</div>";
+                  include 'sql/count_comments.php';
+                  echo "<h2>$comments->comments Comments</h2>";
+                  include 'sql/count_scratches.php';
+                  echo "<h2>$scratches->scratches Scratches</h2>";
 
-         </article>
-      </div>
-      <div id="column2">
+               echo "</article>";
 
-         <article id="sort_filter">
-            <a href="#" class="sortlinks">Hot</a><a href="#" class="sortlinks">New</a><a href="#" class="sortlinks">Top</a>
-         </article>
+            echo "</div>";
+            echo "<div id='column2'>";
 
-         <?php
-            include 'includes/db_connection.php';
-
-            // Open the database connection
-            try{
-               $pdo = openConnection();
-            } catch (PDOException $e){
-               die($e->getMessage());
-            }
+            echo '<article id="sort_filter">';
+               echo '<a href="main.php?sort=new" class="sortlinks">New</a><a href="main.php?sort=hot" class="sortlinks">Hot</a><a href="main.php?sort=top" class="sortlinks">Top</a>';
+            echo '</article>';
 
             if (isset($_GET['search'])) {
                // Search by post title
                include 'sql/search_posts_newest.php';
+            } else if (isset($_GET['sort'])) {
+               // Order based on sort buttons
+               $sort = $_GET['sort'];
+               switch($sort) {
+                  case 'new' :
+                     include 'sql/select_posts_new.php';
+                     break;
+                  case 'hot' :
+                     include 'sql/select_posts_hot.php';
+                     break;
+                  case 'top' :
+                     include 'sql/select_posts_top.php';
+                     break;
+                  default:
+                     include 'sql/select_posts_new.php';
+               }               
             } else {
-               // Sort by newest
-               include 'sql/select_posts_newest.php';
+               // Default sort order
+               include 'sql/select_posts_new.php';
             }
 
             // Execute prepared SQL statement and store the result set
@@ -71,6 +95,7 @@
                public $postDate;
                public $postStatus;
                public $postTitle;
+               public $comments;
             }
 
             // Fetch each post in the result set and generate html
@@ -79,14 +104,18 @@
                echo '<article class="post">';
                echo '<p class = "message_heading">Posted by ' . $post->userName . ' on ' . $post->postDate . '</P>';
                echo '<h1>' . $post->postTitle . '</h1>';
+               // Go to post page to view comments if the user clicks on the image or comments link
                echo "<a href='post.php?post_id=$post->post_ID' class='post_links'>";
                echo "<figure><img src='includes/db_get_post_image.php?post_id=$post->post_ID'></figure>";
                echo "</a>";
                echo '<div>';
-               echo '<a href="#" class="post_links"><img src="images/paw.png" style="height:1.25em;">0 Scratches</a>';
-
-               // Go to post page to view comments
-               echo "<a href='post.php?post_id=$post->post_ID' class='post_links'>0 Comments</a>";
+               // Scratch/unscratch post if user is logged in, else goto login page
+               if(isset($_SESSION['username'])) {
+                  echo "<a href='includes/db_scratch.php?post_id=$post->post_ID' class='post_links'><img src='images/paw.png' style='height:1.25em;'>$post->scratches Scratches</a>";
+               } else {
+                  echo "<a href='login.php' class='post_links'><img src='images/paw.png' style='height:1.25em;'>$post->scratches Scratches</a>";           
+               }
+               echo "<a href='post.php?post_id=$post->post_ID' class='post_links'>$post->comments Comments</a>";
 
                // Include option to disable post if the user has admin privileges
                if (isset($_SESSION['user_type']) && strcmp($_SESSION['user_type'], "Admin") == 0) {

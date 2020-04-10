@@ -63,6 +63,8 @@
                public $postStatus;
                public $postTitle;
                public $postImage;
+               public $scratches;
+               public $comments;
             }
 
             // Fetch the post in the result set and generate html
@@ -73,8 +75,13 @@
             echo '<h1>' . $post->postTitle . '</h1>';
             echo "<figure><img src='includes/db_get_post_image.php?post_id=$post->post_ID'></figure>";
             echo '<div>';
-            echo '<a href="#" class="post_links"><img src="images/paw.png" style="height:1.25em;">0 Scratches</a>';
-            echo '<a href="#" class="post_links">0 Comments</a>';
+            // Scratch/unscratch post if user is logged in, else goto login page
+            if(isset($_SESSION['username'])) {
+               echo "<a href='includes/db_scratch.php?post_id=$post->post_ID' class='post_links'><img src='images/paw.png' style='height:1.25em;'>$post->scratches Scratches</a>";
+            } else {
+               echo "<a href='login.php' class='post_links'><img src='images/paw.png' style='height:1.25em;'>$post->scratches Scratches</a>";           
+            }
+            echo "<a href='#' class='post_links'>$post->comments Comments</a>";
 
             // Text area to comment on post
             if(isset($_SESSION['username'])) {

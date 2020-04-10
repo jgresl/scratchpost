@@ -28,7 +28,7 @@ CREATE TABLE Post (
 	postImage BLOB,
 	user_ID INT NOT NULL,
 	PRIMARY KEY (post_ID),
-	FOREIGN KEY (user_ID) REFERENCES User(User_ID) ON DELETE CASCADE ON UPDATE CASCADE
+	FOREIGN KEY (user_ID) REFERENCES User(User_ID) ON DELETE NO ACTION ON UPDATE CASCADE
 );
 
 CREATE TABLE Comments (
@@ -54,11 +54,6 @@ CREATE TABLE Scratches (
 INSERT INTO User (userName, userEmail, userPassword, userType, userFirstName, userLastName, userBirthdate) VALUES ('jgresl', 'jgresl@hotmail.com', 'jgresl', 'Admin', 'Jonathan', 'Gresl', '1985-7-26');
 INSERT INTO User (userName, userEmail, userPassword, userType, userFirstName, userLastName, userBirthdate) VALUES ('jaxong', 'jgresl2@hotmail.com', 'jaxong', 'Basic', 'Jaxon', 'Gresl', '2020-02-22');
 
-INSERT INTO Post (postTitle, postImage, user_ID) VALUES ('The Lion King :)', 'images/lionking.jpg', 1);
-INSERT INTO Post (postTitle, postImage, user_ID) VALUES ('Kitty is posing for the camera', 'images/posing.jpg', 2);
-INSERT INTO Post (postTitle, postImage, user_ID) VALUES ('Petito The Cat', 'images/petito.jpg', 1);
-INSERT INTO Post (postTitle, postImage, user_ID) VALUES ('Crazy Cat!', 'images/crazycat.jpg', 2);
-
-INSERT INTO Comments (user_ID, post_ID, commentText, commentDate) VALUES (1, 2, "Very nice kitty!", '2020-04-08 19:16:21');
-INSERT INTO Comments (user_ID, post_ID, commentText, commentDate) VALUES (1, 2, "What's his name?", '2020-04-08 19:17:54');
-INSERT INTO Comments (user_ID, post_ID, commentText, commentDate) VALUES (2, 2, "Thank you! I named him Ninja :D", '2020-04-08 19:18:25');
+INSERT INTO Scratches (user_ID, post_ID) VALUES (1, 1);
+INSERT INTO Scratches (user_ID, post_ID) VALUES (2, 1);
+INSERT INTO Scratches (user_ID, post_ID) VALUES (2, 2);

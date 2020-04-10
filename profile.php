@@ -113,7 +113,7 @@
             <div class="banner">
                <h1>Create Post</h1>
             </div>
-            <form method="post" action="includes/db_post.php" enctype="multipart/form-data"><br>
+            <form method="post" action="includes/db_create_post.php" enctype="multipart/form-data"><br>
                <input type="text" name="title" placeholder="Post Title" class="long_text_input" required><br><br>
                <label for="img">Select image:</label>
                <input type="file" name="image" accept="image/*" required><br><br>
@@ -142,6 +142,8 @@
                public $userName;
                public $postDate;
                public $postTitle;
+               public $scratches;
+               public $comments;
             }
 
             // Fetch each post in the result set and generate html
@@ -150,14 +152,18 @@
                echo '<article class="post">';
                echo '<p class="message_heading">Posted by ' . $post->userName . ' on ' . $post->postDate . '</P>';
                echo '<h1>' . $post->postTitle . '</h1>';
+               // Go to post page to view comments if the user clicks on the image or comments link
                echo "<a href='post.php?post_id=$post->post_ID' class='post_links'>";
                echo "<figure><img src='includes/db_get_post_image.php?post_id=$post->post_ID'></figure>";
                echo "</a>";
                echo '<div>';
-               echo '<a href="#" class="post_links"><img src="images/paw.png" style="height:1.25em;">0 Scratches</a>';
-                              
-               // Go to post page to view comments
-               echo "<a href='post.php?post_id=$post->user_ID' class='post_links'>0 Comments</a>";
+               // Scratch/unscratch post if user is logged in, else goto login page
+               if(isset($_SESSION['username'])) {
+                  echo "<a href='includes/db_scratch.php?post_id=$post->post_ID' class='post_links'><img src='images/paw.png' style='height:1.25em;'>$post->scratches Scratches</a>";
+               } else {
+                  echo "<a href='login.php' class='post_links'><img src='images/paw.png' style='height:1.25em;'>$post->scratches Scratches</a>";           
+               }
+               echo "<a href='post.php?post_id=$post->post_ID' class='post_links'>$post->comments Comments</a>";
 
                // Include option to delete post if the post belongs to the user
                echo '<form method="post" action="includes/db_delete_post.php" style="display: inline;">';

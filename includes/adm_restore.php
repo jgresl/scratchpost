@@ -6,8 +6,6 @@
     
     echo '<article>';
     echo '<h1>Database Restore</h1><br>';
-    echo '<figure>';
-    echo '<img src="images/construction.png" alt="Construction Image" height="150px"></img>';
-    echo '</figure>';
+    echo '<img src="images/ddl.png" alt="DDL Image"></img>';
     echo '</article>';
 ?>

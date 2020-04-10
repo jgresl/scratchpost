@@ -17,6 +17,6 @@
    // Close the database connection
    closeConnection($pdo);
    
-   // Redirect to new page
+   // Redirect to previous page
    header("Location: " . $_SERVER['HTTP_REFERER']);
 ?>

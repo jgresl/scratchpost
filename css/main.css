@@ -248,3 +248,7 @@ td, th {
 .long_text_input {
     width: 99.2%;
 }
+
+#scratch_form {
+    display: inline;
+}

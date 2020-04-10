@@ -17,6 +17,8 @@
         public $postStatus;
         public $postTitle;
         public $postImage;
+        public $scratches;
+        public $comments;
     }
 
     // Fetch each post in the result set and generate html
@@ -25,12 +27,20 @@
         echo '<article class="post">';
         echo '<p class="message_heading">Posted by ' . $post->userName . ' on ' . $post->postDate . '</P>';
         echo '<h1>' . $post->postTitle . '</h1>';
+        // Go to post page to view comments if the user clicks on the image or comments link
         echo "<a href='post.php?post_id=$post->post_ID' class='post_links'>";
         echo "<figure><img src='includes/db_get_post_image.php?post_id=$post->post_ID'></figure>";
         echo "</a>";
         echo '<div>';
-        echo '<a href="#" class="post_links"><img src="images/paw.png" style="height:1.25em;">0 Scratches</a>';
-        echo '<a href="#" class="post_links">0 Comments</a>';
+        // Scratch/unscratch post if user is logged in, else goto login page
+        if(isset($_SESSION['username'])) {
+        echo "<a href='includes/db_scratch.php?post_id=$post->post_ID' class='post_links'><img src='images/paw.png' style='height:1.25em;'>$post->scratches Scratches</a>";
+        } else {
+        echo "<a href='login.php' class='post_links'><img src='images/paw.png' style='height:1.25em;'>$post->scratches Scratches</a>";           
+        }
+        echo "<a href='post.php?post_id=$post->post_ID' class='post_links'>$post->comments Comments</a>";
+
+
 
         // Include option to disable post if the user has admin privileges
         if (isset($_SESSION['user_type']) && strcmp($_SESSION['user_type'], "Admin") == 0) {

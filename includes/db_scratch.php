@@ -9,14 +9,14 @@
    }
 
    // Create new user in database
-   include '../sql/delete_post.php';
+   include '../sql/update_post_scratch.php';
 
-   // Execute prepared SQL statement
+   // Execute prepared SQL statement and store the result set
    $statement->execute();
 
    // Close the database connection
    closeConnection($pdo);
    
-   // Redirect to new page
+   // Redirect to previous page
    header("Location: " . $_SERVER['HTTP_REFERER']);
 ?>
