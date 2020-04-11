@@ -185,7 +185,7 @@ a {
     margin-bottom: 0.75em;
 }
 
-.post_links a:link, a:active, a:visited {
+.post_links a, a:link, a:active, a:visited {
     color: #FF7400;
 }
 
@@ -251,4 +251,27 @@ td, th {
 
 #scratch_form {
     display: inline;
+}
+
+.message_activity {
+    color: black;
+    margin: 1em;
+    white-space: nowrap;
+}
+
+#to_from_container {
+    white-space: nowrap;
+}
+
+.to_from {
+    padding: 0.5em;
+    margin: 0.5em;
+    margin-bottom: 2em;
+    font-weight: bold;
+}
+
+.name_tag {
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
 }

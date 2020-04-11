@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS Comments;
-DROP TABLE IF EXISTS Scratches;
+DROP TABLE IF EXISTS Likes;
 DROP TABLE IF EXISTS Post;
 DROP TABLE IF EXISTS User;
 
@@ -53,7 +53,3 @@ CREATE TABLE Scratches (
 
 INSERT INTO User (userName, userEmail, userPassword, userType, userFirstName, userLastName, userBirthdate) VALUES ('jgresl', 'jgresl@hotmail.com', 'jgresl', 'Admin', 'Jonathan', 'Gresl', '1985-7-26');
 INSERT INTO User (userName, userEmail, userPassword, userType, userFirstName, userLastName, userBirthdate) VALUES ('jaxong', 'jgresl2@hotmail.com', 'jaxong', 'Basic', 'Jaxon', 'Gresl', '2020-02-22');
-
-INSERT INTO Scratches (user_ID, post_ID) VALUES (1, 1);
-INSERT INTO Scratches (user_ID, post_ID) VALUES (2, 1);
-INSERT INTO Scratches (user_ID, post_ID) VALUES (2, 2);

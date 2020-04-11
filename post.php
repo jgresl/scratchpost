@@ -18,37 +18,57 @@
       <div id="column1">
          <article id="community">
             <div class="banner">
-               <h1>Community</h1>
-            </div>
-            <h2>2 Members</h2>
-            <h2>1 Online</h2>
-            <br>
-            <?php
-               if(isset($_SESSION['username'])) {
-                  echo '<a href="profile.php" id="newpost">NEW POST</a>';
+               <h1>Posted By</h1>
+            </div><br>
+               <?php
+               include 'includes/db_connection.php';
+
+               // Open the database connection
+               try{
+                  $pdo = openConnection();
+               } catch (PDOException $e){
+                  die($e->getMessage());
+               }               
+
+               // Query for user profile info
+               include 'sql/select_user_profile.php';
+
+               // Execute prepared SQL statement and store the result set
+               $statement->execute();
+
+               //Build class to store result set attributes
+               class User {
+                  public $user_ID;
+                  public $userName;
+                  public $userEmail;
+                  public $userFirstName;
+                  public $userLastName;
+                  public $userBirthdate;
                }
-            ?>  
-         </article>
 
-         <article id="tags">
-            <div class="banner">
-               <h1>Tags</h1>
-            </div>
+               // Fetch user profile info in the result set and generate html
+               $user = $statement->fetchObject('User');
 
-         </article>
-      </div>
-      <div id="column2">
-         <?php
-            include 'includes/db_connection.php';
+               echo '<figure><img src="includes/db_get_user_image.php?user_id=' . $user->user_ID . '" alt="Profile Pic" class="profile_pic"></figure>';
+               echo "<div class='name_tag'><p>$user->userName</p></div><br>";
+               
+               // Display the total number of comments and scratches
+               echo "</article>";
+               echo "<article id='tags'>";
+                  echo "<div class='banner'>";
+                     echo "<h1>User Counts</h1>";
+                  echo "</div>";
+                  include 'sql/count_user_posts.php';
+                  echo "<h2>$posts->posts Posts</h2>";
+                  include 'sql/count_user_comments.php';
+                  echo "<h2>$comments->comments Comments</h2>";
+                  include 'sql/count_user_scratches.php';
+                  echo "<h2>$scratches->scratches Scratches</h2>";
 
-            // Open the database connection
-            try{
-               $pdo = openConnection();
-            } catch (PDOException $e){
-               die($e->getMessage());
-            }
+               echo "</article>";
 
-
+            echo "</div>";
+            echo "<div id='column2'>";
             // SQL query to return the post information for the main article
             include 'sql/select_post_image.php';
 

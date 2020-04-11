@@ -47,6 +47,8 @@
                   echo "<div class='banner'>";
                      echo "<h1>Global Counts</h1>";
                   echo "</div>";
+                  include 'sql/count_posts.php';
+                  echo "<h2>$posts->posts Posts</h2>";
                   include 'sql/count_comments.php';
                   echo "<h2>$comments->comments Comments</h2>";
                   include 'sql/count_scratches.php';
