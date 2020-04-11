@@ -31,7 +31,7 @@
                }               
 
                // Query for user profile info
-               include 'sql/select_user_profile.php';
+               include 'sql/select_post_profile.php';
 
                // Execute prepared SQL statement and store the result set
                $statement->execute();

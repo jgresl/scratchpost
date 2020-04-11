@@ -98,6 +98,7 @@
                public $postStatus;
                public $postTitle;
                public $comments;
+               public $scratches;
             }
 
             // Fetch each post in the result set and generate html
